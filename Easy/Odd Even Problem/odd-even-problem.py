@@ -6,6 +6,7 @@ class Solution:
         for i in range(len(s)):
             freq[ord(s[i]) - ord('a')] += 1
                 
+                
         nx = 0
         ny = 0
         
