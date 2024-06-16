@@ -1,18 +1,17 @@
 
 from typing import List
 
+primes = [True]*(10**6+1)
+ptr = 2
+while ptr*ptr < len(primes):
+    if primes[ptr]:
+        for i in range(ptr*ptr, len(primes), ptr):
+            primes[i] = False
+    ptr += 1
 
 class Solution:
     def getPrimes(self, n : int) -> List[int]:
-        primes = [True]*(n)
-        ptr = 2
-        while ptr < len(primes):
-            if primes[ptr]:
-                for i in range(ptr*ptr, len(primes), ptr):
-                    primes[i] = False
-            ptr += 1
-        
-        for i in range(2, len(primes)):
+        for i in range(2, n//2+1):
             if primes[i] and primes[n-i]:
                 return [i, n-i]
             
