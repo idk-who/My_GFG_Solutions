@@ -13,19 +13,17 @@ class Node:
 class Solution:
 
     def populateNext(self, root):
-        prev = None
+        self.prev = None
+        def solve(root):
+            if not root:
+                return 
+            solve(root.left)
+            if self.prev:
+                self.prev.next = root
+            self.prev = root
+            solve(root.right)
         
-        def populate(n):
-            nonlocal prev
-            if not n:
-                return
-            populate(n.left)
-            if prev:
-                prev.next = n
-            prev = n
-            populate(n.right)
-        populate(root)
-        return root
+        solve(root)
 
 
 
