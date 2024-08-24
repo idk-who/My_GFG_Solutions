@@ -3,28 +3,25 @@
 class Solution:
     
     #Function to return max value that can be put in knapsack of capacity W.
-    def knapSack(self,W, wt, val, n):
+    def knapSack(self,W, wt, val):
        
-        def rec(vals, wts, ptr, wt, dp):
-            if ptr == len(vals):
+        def rec(wts, vals, ptr, wt, dp):
+            if ptr == len(wts) or wt == 0:
                 return 0
             
             if (ptr, wt) in dp:
                 return dp[(ptr, wt)]
             
             ma = max(
-                rec(vals, wts, ptr+1, wt, dp),
-                vals[ptr] + rec(vals, wts, ptr+1, wt-wts[ptr], dp) if wts[ptr] <= wt else 0
+                rec(wts, vals, ptr+1, wt, dp),
+                vals[ptr]+rec(wts, vals, ptr+1, wt-wts[ptr], dp) if wt-wts[ptr] >= 0 else 0
                 )
             
             dp[(ptr, wt)] = ma
             
             return ma
         
-        dp = dict()
-        
-        return rec(val, wt, 0, W, dp)
-
+        return rec(wt, val, 0, W, dict())
 
 #{ 
  # Driver Code Starts
@@ -33,15 +30,14 @@ import atexit
 import io
 import sys
 
-# Contributed by : Nagendra Jha
-
 if __name__ == '__main__':
     test_cases = int(input())
     for cases in range(test_cases):
-        n = int(input())
+        # n = int(input())
         W = int(input())
-        val = list(map(int,input().strip().split()))
-        wt = list(map(int,input().strip().split()))
-        ob=Solution()
-        print(ob.knapSack(W,wt,val,n))
+        val = list(map(int, input().strip().split()))
+        wt = list(map(int, input().strip().split()))
+        ob = Solution()
+        print(ob.knapSack(W, wt, val))
+
 # } Driver Code Ends
