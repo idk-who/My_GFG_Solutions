@@ -4,18 +4,20 @@ class Solution:
     
     #Function to return a list containing the DFS traversal of the graph.
     def dfsOfGraph(self, V, adj):
-
-        def DFS(node, adj, traversal, visited):
-            visited.add(node)
-            traversal.append(node)
-            for v in adj[node]:
-                if v not in visited:
-                    DFS(v, adj, traversal, visited)
-        
-        visited = set()
         traversal = []
-        DFS(0, adj, traversal, visited)
+        visited = [False]*V
+        
+        def dfs(u, visited):
+            if not visited[u]:
+                visited[u] = True
+                traversal.append(u)
+                
+                for v in adj[u]:
+                    dfs(v, visited)
+        
+        dfs(0, visited)
         return traversal
+        
 
 #{ 
  # Driver Code Starts
