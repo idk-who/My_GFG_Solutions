@@ -1,50 +1,33 @@
 from typing import List
 
 class Solution:
-    def findPath(self, grid: List[List[int]]) -> List[str]:
-        n, m = len(grid), len(grid[0])
-        if grid[0][0] == 0 or grid[-1][-1] == 0: return []
+    def findPath(self, m: List[List[int]]) -> List[str]:
+        n = len(m)
+        all_paths = []
+        visited = [[False]*n for _ in range(n)]
+        directions = [(0, 1, 'R'), (0, -1, 'L'), (1, 0, 'D'), (-1, 0, 'U')]
         
-        ans = []
+        def rec(i, j, path):
+            if i == n-1 and j == n-1:
+                all_paths.append(path)
+                return
+            
+            for di, dj, d in directions:
+                ni, nj = i+di, j+dj
+                if 0 <= ni < n and 0 <= nj < n:
+                    if visited[ni][nj] == False and m[ni][nj] == 1:
+                        visited[ni][nj] = True
+                        rec(ni, nj, path+d)
+                        visited[ni][nj] = False
         
-        def rec(grid, i, j, path, ans):
-            if i == n-1 and j == m-1:
-                ans.append("".join(path))
-                return 
-            
-            if i+1<n and grid[i+1][j]:
-                grid[i+1][j] = 0
-                path.append('D')
-                rec(grid, i+1, j, path, ans)
-                path.pop()
-                grid[i+1][j] = 1
-            
-            if i-1>=0 and grid[i-1][j]:
-                grid[i-1][j] = 0
-                path.append('U')
-                rec(grid, i-1, j, path, ans)
-                path.pop()
-                grid[i-1][j] = 1
-            
-            if j+1<m and grid[i][j+1]:
-                grid[i][j+1] = 0
-                path.append('R')
-                rec(grid, i, j+1, path, ans)
-                path.pop()
-                grid[i][j+1] = 1
-            
-            if j-1>=0 and grid[i][j-1]:
-                grid[i][j-1] = 0
-                path.append('L')
-                rec(grid, i, j-1, path, ans)
-                path.pop()
-                grid[i][j-1] = 1
+        if m[0][0] == 1: 
+            visited[0][0] = True
+            rec(0, 0, "")
         
-        ans = []
-        grid[0][0] = 0
-        rec(grid, 0, 0, [], ans)
-        grid[0][0] = 1
-        return ans
+        return all_paths
+                        
+
+
 
 #{ 
  # Driver Code Starts
