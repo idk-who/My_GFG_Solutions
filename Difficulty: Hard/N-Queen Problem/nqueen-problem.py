@@ -2,30 +2,38 @@
 
 class Solution:
     def nQueen(self, n):
-        # code here
-        mat=[0]*n
-        def check(mat,ind):
-            i=ind-1
-            while i>-1:
-                if mat[i]==mat[ind] or mat[ind]-mat[i]==ind-i or mat[ind]-mat[i]==i-ind:
+        board = [[False]*n for _ in range(n)]
+        all_solutions = []
+        
+        def is_safe(board, i, j):
+            dj = 0
+            while i >= 0:
+                if board[i][j]:
                     return False
-                i-=1
+                if j + dj < n and board[i][j+dj]:
+                    return False
+                if j - dj >= 0 and board[i][j-dj]:
+                    return False
+                dj += 1
+                i -= 1
             return True
-            
-        def rec(ind,mat,n):
-            if ind==n:
-                ans.append(mat.copy())
+                
+        
+        def rec(board, i, soln = []):
+            if i == n:
+                all_solutions.append(soln[:])
                 return
-            for i in range(n):
-                mat[ind]=i+1
-                if check(mat,ind):
-                    mat[ind]=i+1
-                    rec(ind+1,mat,n)
-                    # print(mat)
-                # mat[ind]=0    
-        ans=[]
-        rec(0,mat,n)
-        return ans
+            for j in range(n):
+                if is_safe(board, i, j):
+                    board[i][j] = True
+                    soln.append(j+1)
+                    rec(board, i+1, soln)
+                    soln.pop()
+                    board[i][j] = False
+        
+        rec(board, 0, [])
+    
+        return all_solutions
 
 #{ 
  # Driver Code Starts
