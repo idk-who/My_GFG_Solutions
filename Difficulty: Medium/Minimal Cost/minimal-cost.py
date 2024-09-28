@@ -1,28 +1,40 @@
-#User function Template for python3
-
-class Solution:
-    def minimizeCost(self, height, n, k):
-        dp = [-1]*n
-        dp[0] = 0
-        
-        for i in range(1, n):
-            mi = float('inf')
-            for j in range(i - min(k, i), i):
-                mi = min(mi, abs(height[i]-height[j])+dp[j])
-            dp[i] = mi
-        
-        return dp[-1]
-        
-
 #{ 
  # Driver Code Starts
 #Initial Template for Python 3
 
-if __name__ == '__main__':
+# } Driver Code Ends
+#User function Template for python3
+class Solution:
+    def minimizeCost(self, k, arr):
+        n = len(arr)
+        
+        dp = [float('inf')]*n
+        dp[0] = 0
+        
+        for i in range(1, n):
+            for j in range(i-1, max(0, i-k)-1, -1):
+                dp[i] = min(
+                    dp[i],
+                    dp[j] + abs(arr[i] - arr[j])
+                    )
+                    
+        return dp[-1]
+        
+        
+
+#{ 
+ # Driver Code Starts.
+#Initial Template for Python 3
+
+if __name__ == "__main__":
     t = int(input())
-    for _ in range(t):
-        n, k = map(int, input().split())
-        height = list(map(int, input().split()))
+    while t > 0:
+        k= int(input())
+        arr = list(map(int, input().split()))
         ob = Solution()
-        print(ob.minimizeCost(height, n, k))
+        res = ob.minimizeCost(k,arr)
+        print(res)
+        t -= 1
+
+
 # } Driver Code Ends
