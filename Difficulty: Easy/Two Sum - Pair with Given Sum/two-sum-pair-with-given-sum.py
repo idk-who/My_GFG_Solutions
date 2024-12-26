@@ -1,12 +1,18 @@
 #User function Template for python3
 class Solution:
 	def twoSum(self, arr, target):
-        s = set()
+        arr.sort()
         
-        for i in arr:
-            if target-i in s:
+        l = 0
+        r = len(arr) - 1
+        
+        while l < r:
+            if arr[l] + arr[r] == target:
                 return True
-            s.add(i)
+            elif arr[l] + arr[r] < target:
+                l += 1
+            else:
+                r -= 1
         
         return False
 
