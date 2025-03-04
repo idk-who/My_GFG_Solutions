@@ -1,17 +1,22 @@
-from bisect import bisect_left
 class Solution:
     def lis(self, arr):
         # code here
-        seq = []
+        n = len(arr)
+        dp = [1]*n
         
-        for i in arr:
-            if not seq or i > seq[-1]:
-                seq.append(i)
-            else:
-                ind = bisect_left(seq, i)
-                seq[ind] = i
+        for i in range(n):
+            for j in range(i):
+                if arr[j] < arr[i]:
+                    dp[i] = max(
+                        dp[i],
+                        1 + dp[j]
+                    )
         
-        return len(seq)
+        return max(dp)
+        
+        
+        
+            
 
 
 
