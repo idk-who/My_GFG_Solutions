@@ -1,16 +1,26 @@
 class Solution:
-
-    def lcs(self,s1,s2):
-        x = len(s1)
-        y = len(s2)
-        dp=[[0]*(y+1) for z in range(x+1)]
-        for i in range(x):
-            for j in range(y):
-                if s1[i]==s2[j]:
-                    dp[i+1][j+1]=dp[i][j]+1
-                else:
-                    dp[i+1][j+1]=max(dp[i][j+1],dp[i+1][j])
-        return dp[-1][-1]
+    def lcs(self, s1, s2):
+        # code here
+        dp = [[-1]*len(s2) for _ in range(len(s1))]
+        def rec(p1, p2):
+            if p1 == len(s1) or p2 == len(s2):
+                return 0
+            if dp[p1][p2] != -1:
+                return dp[p1][p2]
+            
+            if s1[p1] == s2[p2]:
+                ma = 1 + rec(p1+1, p2+1)
+            else:
+                ma = max(
+                    rec(p1+1, p2),
+                    rec(p1, p2+1)
+                )
+            
+            dp[p1][p2] = ma
+            
+            return ma
+        
+        return rec(0, 0)
 
 #{ 
  # Driver Code Starts
