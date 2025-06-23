@@ -1,50 +1,27 @@
-#User function Template for python3
+from collections import deque
 
 class Solution:
+    def get(self,count):
+        n=len(count)
+        i=n-1
+        while i>=0:
+            if count[i]:
+                count[i]-=1
+                return i
+            i-=1
+        return 0
+        
     def minSum(self, arr):
-        arr.sort()
-        p1 = len(arr) - 1
-        ans = []
-        carry = 0
-        
-        while p1-1 >= 0:
-            temp = arr[p1]+arr[p1-1] + carry 
-            digit = temp % 10 
-            carry = temp // 10
-            ans.append(digit)
-            p1 -= 2
-            # print(ans)
-        
-        if p1 == 0:
-            temp = arr[p1] + carry 
-            digit = temp % 10 
-            carry = temp // 10
-            ans.append(digit)
-        
-        if carry > 0:
-            ans.append(carry)
-            
-        while ans[-1] == 0:
-            ans.pop()
-        
-        
-        return "".join(map(str, reversed(ans)))
-        
-
-
-#{ 
- # Driver Code Starts
-#Initial Template for Python 3
-
-if __name__ == '__main__':
-    tc = int(input())
-    while tc > 0:
-        arr = list(map(int, input().strip().split()))
-        ob = Solution()
-        ans = ob.minSum(arr)
-        print(ans)
-        tc -= 1
-
-        print("~")
-
-# } Driver Code Ends
+        count=[0]*10
+        for item in arr:
+            count[item]+=1
+        ans=deque()
+        carry=0
+        while True:
+            total=self.get(count)+self.get(count)+carry
+            carry=total//10
+            val=total%10
+            if carry or val:
+                ans.appendleft(str(val))
+            else:
+                return "".join(ans)
