@@ -20,6 +20,8 @@ class Solution:
             freq[old] -= 1
             freq[new] += 1
             heappush(heap, [-freq[new], new])
+            # Can also push modified freq of last
+            # if directly took freq from counter
             while -heap[0][0] != freq[heap[0][1]]:
                 heappop(heap)
             su += heap[0][1]
