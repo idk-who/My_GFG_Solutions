@@ -1,14 +1,18 @@
+from collections import defaultdict
 class Solution:
     def countAtMostK(self, arr, k):
-        freq={}
-        ans=0
-        left=0
-        for right in range(len(arr)):
-            freq[arr[right]]=freq.get(arr[right],0)+1
-            while len(freq)>k:
-                freq[arr[left]]-=1
-                if freq[arr[left]]==0:
-                    del freq[arr[left]]
-                left+=1
-            ans+=(right-left+1)
-        return ans
+        # Code here
+        l,r=0,0
+        n=len(arr)
+        cnt=0
+        mp=defaultdict(int)
+        while(r<n):
+            mp[arr[r]]+=1         
+            while(len(mp)>k):
+                mp[arr[l]]-=1
+                if(mp[arr[l]]==0):
+                    del mp[arr[l]]
+                l+=1
+            cnt+=(r-l+1)
+            r+=1
+        return cnt
