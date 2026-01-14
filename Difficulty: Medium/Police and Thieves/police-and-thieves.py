@@ -1,44 +1,28 @@
-import heapq
-
 class Solution:
     def catchThieves(self, arr, k):
-        cnt = 0
-        police = []
-        thief = []
+        from collections import Counter
+        n= len(arr)
         
-        for i in range(len(arr)):
-            if arr[i] == 'P':
-                caught = False
-                
-                while thief:
-                    if thief[0] < i - k:
-                        heapq.heappop(thief)
-                    elif thief[0] >= i - k:
-                        heapq.heappop(thief)
-                        caught = True
-                        cnt += 1
-                        break
-                    else:
-                        break
-                
-                if not caught:
-                    heapq.heappush(police, i)
+        c = 0
+        thief = []
+        police = []
+        for i in range(n):
+            if(arr[i] == "T"):
+                thief.append(i)
             else:
-                caught = False
+                police.append(i)
+        i = j = 0
+        
+        while i < len(police) and j < len(thief):
+            if(abs(police[i] - thief[j]) <=k):
+                c+=1
+                i+=1
+                j+=1
+            elif police[i] < thief[j]:
+                i+=1
+            else:
+                j+=1
+            
+        return c
                 
-                while police:
-                    if police[0] < i - k:
-                        heapq.heappop(police)
-                    elif police[0] >= i - k:
-                        heapq.heappop(police)
-                        caught = True
-                        cnt += 1
-                        break
-                    else:
-                        break
                 
-                if not caught:
-                    heapq.heappush(thief, i)
-                
-                        
-        return cnt
