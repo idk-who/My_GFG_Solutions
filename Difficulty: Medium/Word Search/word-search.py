@@ -1,54 +1,43 @@
 class Solution:
-	def isWordExist(self, mat, word):
-	    n, m = len(mat), len(mat[0])
-	    visited = [[False]*m for i in range(n)]
-		def rec(mat, i, j, word, k):
-		    if k == len(word):
-		        return True
-		    if 0 <= i < n and 0 <= j < m and not visited[i][j]:
-		        if mat[i][j] == word[k]:
-		            visited[i][j] = True
-		            ans = (
-		                rec(mat, i-1, j, word, k+1) or
-		                rec(mat, i+1, j, word, k+1) or
-		                rec(mat, i, j-1, word, k+1) or
-		                rec(mat, i, j+1, word, k+1)
-		                )
-		            visited[i][j] = False
-		            
-		            return ans
-		       
-		    return False
-	    
-	    for i in range(n):
-	        for j in range(m):
-	            if rec(mat, i, j, word, 0):
-	                return True
-	    
-	    return False
+    def isWordExist(self, mat, word):
+        n, m = len(mat), len(mat[0])
 
+        # Early prune: if word contains more occurrences of a letter
+        # than the board, no need to search.
+        from collections import Counter
+        board_count = Counter(sum(mat, []))
+        word_count = Counter(word)
+        for ch in word_count:
+            if word_count[ch] > board_count.get(ch, 0):
+                return False
 
-#{ 
- # Driver Code Starts
-if __name__ == '__main__':
-    T = int(input())
-    for tt in range(T):
-        n = int(input())
-        m = int(input())
-        mat = []
+        def dfs(i, j, idx):
+            if idx == len(word):
+                return True
+
+            # boundary conditions or mismatch
+            if i < 0 or j < 0 or i >= n or j >= m or mat[i][j] != word[idx]:
+                return False
+
+            temp = mat[i][j]
+            mat[i][j] = "#"     # mark visited
+
+            # explore 4 directions
+            found = (
+                dfs(i+1, j, idx+1) or
+                dfs(i-1, j, idx+1) or
+                dfs(i, j+1, idx+1) or
+                dfs(i, j-1, idx+1)
+            )
+
+            mat[i][j] = temp    # restore
+            return found
+
+        # Try starting from each position
         for i in range(n):
-            a = list(input().strip().split())
-            b = []
             for j in range(m):
-                b.append(a[j][0])
-            mat.append(b)
-        word = input().strip()
-        obj = Solution()
-        ans = obj.isWordExist(mat, word)
-        if ans:
-            print("true")
-        else:
-            print("false")
-        print("~")
+                if mat[i][j] == word[0]:
+                    if dfs(i, j, 0):
+                        return True
 
-# } Driver Code Ends
+        return False
