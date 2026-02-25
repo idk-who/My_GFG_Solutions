@@ -1,36 +1,25 @@
-#{ 
- # Driver Code Starts
-#Initial Template for Python 3
-
-# } Driver Code Ends
-
-#User function Template for python3
 class Solution:
     def longestSubarray(self, arr, k):
-        prefix_diffs, diff, max_length = {0: -1}, 0, 0
+        prefix_sum = 0
+        max_len = 0
+        first_occurrence = {}
+        
         for i in range(len(arr)):
-            diff += 1 if arr[i] > k else -1
-            if diff > 0:
-                max_length = i + 1
-            elif diff - 1 in prefix_diffs:
-                max_length = max(max_length, i - prefix_diffs[diff - 1])
-            if diff not in prefix_diffs:
-                prefix_diffs[diff] = i
-        return max_length
-        
-
-#{ 
- # Driver Code Starts.
-
-if __name__ == "__main__":
-    t = int(input())
-    while t > 0:
-        
-        arr = [int(x) for x in input().strip().split()]
-        k = int(input())
-        
-        ob = Solution()
-        print(ob.longestSubarray(arr, k))
-        print("~")
-        t -= 1
-# } Driver Code Ends
+            if arr[i] > k:
+                prefix_sum += 1
+            else:
+                prefix_sum -= 1
+                
+             # If prefix sum > 0, whole subarray [0..i] is valid
+            if prefix_sum > 0:
+                max_len = i + 1
+            else:
+                # Store first occurrence
+                if prefix_sum not in first_occurrence:
+                    first_occurrence[prefix_sum] = i
+                
+                # Check if (prefix_sum - 1) exists
+                if (prefix_sum - 1) in first_occurrence:
+                    max_len = max(max_len, i - first_occurrence[prefix_sum - 1])
+                    
+        return max_len
