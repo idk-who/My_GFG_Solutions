@@ -1,49 +1,42 @@
+'''
+class Node:
+
+    def __init__(self, val):
+        self.data = val
+        self.left = None
+        self.right = None
+'''
+
+from collections import deque
+
 class Solution:
-    def parent(self,root,target):
-        parentMap={}
-        curr = None
-        q=[]
-        q.append(root)
-        while q:
-            curr = q.pop(0)
-            if curr.data==target:
-                x=curr
-            if curr.left:
-                parentMap[curr.left]=curr
-                q.append(curr.left)
-            if curr.right:
-                parentMap[curr.right]=curr
-                q.append(curr.right)
-        return (parentMap,x)
-    def minTime(self, root,target):
-        # code here
-        parentMap,x =self.parent(root,target)
-        q=[]
-        burned={
-            x:True
-        }
-        q.append(x)
-        time=0
+    
+    def __init__(self):
+        self.parent_map={}
+        self.target_node=None
+        self.target=None
+        
+    def find_parent_map(self,curr,parent):
+        if curr:
+            if curr.data==self.target:
+                self.target_node=curr
+            self.parent_map[curr]=parent
+            self.find_parent_map(curr.left,curr)
+            self.find_parent_map(curr.right,curr)
+        
+    def minTime(self, root, target):
+        ans=-1
+        self.target=target
+        self.find_parent_map(root,None)
+        q=deque([self.target_node])
+        visited={self.target_node}
         while q:
             size=len(q)
-            isBurned=False
-            while size>0:
-                curr=q.pop(0)
-                
-                if curr in parentMap.keys() and parentMap[curr] not in burned.keys():
-                    isBurned=True
-                    burned[parentMap[curr]]=True
-                    q.append(parentMap[curr])
-                if curr.left and curr.left not in burned.keys():
-                    isBurned=True
-                    burned[curr.left]=True
-                    q.append(curr.left)
-                if curr.right and curr.right not in burned.keys():
-                    isBurned=True
-                    burned[curr.right]=True
-                    q.append(curr.right)
-                
-                size-=1
-            if isBurned:
-                time+=1
-        return time
+            for _ in range(size):
+                curr=q.popleft()
+                for v in [curr.left,curr.right,self.parent_map[curr]]:
+                    if v and v not in visited:
+                        q.append(v)
+                        visited.add(v)
+            ans+=1
+        return ans
