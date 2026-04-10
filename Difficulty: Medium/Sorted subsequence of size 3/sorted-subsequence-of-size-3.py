@@ -1,54 +1,27 @@
-#User function Template for python3
-
-
-
 class Solution:
     def find3Numbers(self, arr):
-        tmn, mn, mgmn = float('inf'), float('inf'), float('inf')
-        
-        for i in arr:
-            if i <= tmn:
-                tmn = i
-            elif i <= mgmn:
-                mgmn = i
-                mn = tmn
-            else:
-                return [mn, mgmn, i]
-                
-        return []
-
-
-#{ 
- # Driver Code Starts
-#Initial Template for Python 3
-
-
-def isSubSequence(v1, v2):
-    m = len(v2)
-    n = len(v1)
-    j = 0  # For index of v2
-    # Traverse v1 and v2
-    for i in range(n):
-        if j < m and v1[i] == v2[j]:
-            j += 1
-    return j == m
-
-
-if __name__ == "__main__":
-    t = int(input())
-    for _ in range(t):
-        arr = list(map(int, input().split()))
+        # Code Here
         n = len(arr)
-        obj = Solution()
-        res = obj.find3Numbers(arr)
-        if len(res) != 0 and len(res) != 3:
-            print(-1)
-        else:
-            if not res:
-                print(0)
-            elif res[0] < res[1] < res[2] and isSubSequence(arr, res):
-                print(1)
-            else:
-                print(-1)
-
-# } Driver Code Ends
+        prev_small = [-1]*n
+        next_great = [n]*n
+        
+        stk = []
+        for i in range(n):
+            while(stk and arr[stk[-1]] >= arr[i]):
+                stk.pop()
+            if stk:
+                prev_small[i] = stk[-1]
+            stk.append(i)
+        stk = []
+        for i in range(n-1, -1, -1):
+            while(stk and arr[stk[-1]] <= arr[i]):
+                stk.pop()
+            if stk:
+                next_great[i] = stk[-1]
+            stk.append(i)
+        
+        res = []
+        for i in range(n):
+            if prev_small[i] != -1 and next_great[i] != n:
+                return [arr[prev_small[i]], arr[i], arr[next_great[i]]]
+        return res
